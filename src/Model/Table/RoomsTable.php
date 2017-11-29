@@ -7,21 +7,21 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Movies Model
+ * Rooms Model
  *
  * @property \App\Model\Table\ShowtimesTable|\Cake\ORM\Association\HasMany $Showtimes
  *
- * @method \App\Model\Entity\Movie get($primaryKey, $options = [])
- * @method \App\Model\Entity\Movie newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Movie[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Movie|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Movie patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Movie[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Movie findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Room get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Room newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Room[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Room|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Room patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Room[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Room findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class MoviesTable extends Table
+class RoomsTable extends Table
 {
 
     /**
@@ -34,14 +34,14 @@ class MoviesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('movies');
+        $this->setTable('rooms');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
         $this->hasMany('Showtimes', [
-            'foreignKey' => 'movie_id'
+            'foreignKey' => 'room_id'
         ]);
     }
 
@@ -63,19 +63,9 @@ class MoviesTable extends Table
             ->notEmpty('name');
 
         $validator
-            ->scalar('description')
-            ->requirePresence('description', 'create')
-            ->notEmpty('description');
-
-        $validator
-            ->integer('duration')
-            ->requirePresence('duration', 'create')
-            ->notEmpty('duration');
-        
-        $validator
-            ->date('released')
-            ->requirePresence('released', 'create')
-            ->notEmpty('released');
+            ->integer('capacity')
+            ->requirePresence('capacity', 'create')
+            ->notEmpty('capacity');
 
         return $validator;
     }
