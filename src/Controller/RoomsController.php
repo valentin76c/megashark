@@ -2,6 +2,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
+use Cake\I18n\Date;
 
 /**
  * Rooms Controller
@@ -37,9 +40,35 @@ class RoomsController extends AppController
         $room = $this->Rooms->get($id, [
             'contain' => []
         ]);
-
+        
+        $seance = "";
+        
+        $weekStart = new Time(strtotime('monday this week'));
+        $weekEnd = new Time(strtotime('sunday this week'));
+        $weekStartAff = $weekStart->format('d-M H:m');
+        $weekEndAff = $weekEnd->format('d-M H:m');
+        
+        $seance = $seance."<td>$weekStartAff</td>";
+        $seance = $seance."<td>$weekEndAff</td>";
+        
+        $query = TableRegistry::get('showtimes')->find();
+        $query->where(['room_id' => $room->id]);
+        $query->where(['start <=' => new Time()]);
+        foreach ($query as $data) {
+            $queryFilm = TableRegistry::get('movies')->find();
+            $movieName = $queryFilm->where(['id' => $data->movie_id])->first();
+            $date = new Time($data->start);
+            $dateBegin = $date->format('d-M H:m');
+            $date = new Time($data->end);
+            $dateEnd = $date->format('d-M H:m');
+            $seance = $seance."<td> Nom : $movieName->name<br>Début : $dateBegin<br>Fin : $dateEnd</td>";
+        }
+        
         $this->set('room', $room);
         $this->set('_serialize', ['room']);
+        $this->set('seance', $seance);
+        $this->set('_serialize', ['seance']);
+        
     }
 
     /**

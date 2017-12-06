@@ -36,5 +36,9 @@
             <th scope="row"><?= __('Modified') ?></th>
             <td><?= h($room->modified) ?></td>
         </tr>
+        <tr>
+            <th scope="row"><?= __('Seance') ?></th>
+            <td><?= $seance ?></td>
+        </tr>
     </table>
 </div>
