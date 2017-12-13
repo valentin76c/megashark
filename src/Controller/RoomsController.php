@@ -47,13 +47,26 @@ class RoomsController extends AppController
         $weekEnd = new Time(strtotime('sunday this week'));
         $weekStartAff = $weekStart->format('d-M H:m');
         $weekEndAff = $weekEnd->format('d-M H:m');
+        $seance = array(
+            "1" => "",
+            "2" => "",
+            "3" => "",
+            "4" => "",
+            "5" => "",
+            "6" => "",
+            "7" => ""
+        );
         
+        
+        /*
         $seance = $seance."<td>$weekStartAff</td>";
         $seance = $seance."<td>$weekEndAff</td>";
+        */
         
         $query = TableRegistry::get('showtimes')->find();
         $query->where(['room_id' => $room->id]);
-        $query->where(['start <=' => new Time()]);
+        $query->where(['start >=' => $weekStart]);
+        $query->where(['end <=' => $weekEnd]);
         foreach ($query as $data) {
             $queryFilm = TableRegistry::get('movies')->find();
             $movieName = $queryFilm->where(['id' => $data->movie_id])->first();
@@ -61,7 +74,8 @@ class RoomsController extends AppController
             $dateBegin = $date->format('d-M H:m');
             $date = new Time($data->end);
             $dateEnd = $date->format('d-M H:m');
-            $seance = $seance."<td> Nom : $movieName->name<br>Début : $dateBegin<br>Fin : $dateEnd</td>";
+            $seance[$data->start->format('N')] =  $seance[$data->start->format('N')]." Nom : $movieName->name<br>Début : $dateBegin<br>Fin : $dateEnd";
+            
         }
         
         $this->set('room', $room);

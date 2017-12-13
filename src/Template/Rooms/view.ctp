@@ -37,8 +37,25 @@
             <td><?= h($room->modified) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Seance') ?></th>
-            <td><?= $seance ?></td>
+            <th scope="row"><?= __('') ?></th>
+            <th scope="row"><?= __('Lundi') ?></th>
+            <th scope="row"><?= __('Mardi') ?></th>
+            <th scope="row"><?= __('Mercredi') ?></th>
+            <th scope="row"><?= __('Jeudi') ?></th>
+            <th scope="row"><?= __('Vendredi') ?></th>
+            <th scope="row"><?= __('Samedi') ?></th>
+            <th scope="row"><?= __('Dimanche') ?></th>
         </tr>
+        <tr>
+            <td></td>
+            <td><?= $seance[1] ?></td>
+            <td><?= $seance[2] ?></td>
+            <td><?= $seance[3] ?></td>
+            <td><?= $seance[4] ?></td>
+            <td><?= $seance[5] ?></td>
+            <td><?= $seance[6] ?></td>
+            <td><?= $seance[7] ?></td>
+        </tr>
+
     </table>
 </div>
