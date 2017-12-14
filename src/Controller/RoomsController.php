@@ -41,43 +41,45 @@ class RoomsController extends AppController
             'contain' => []
         ]);
         
-        $seance = "";
+        // On initialise le tableau contenant les séances
+        $seance = array(
+            1 => array(),
+            2 => array(),
+            3 => array(),
+            4 => array(),
+            5 => array(),
+            6 => array(),
+            7 => array()
+        );
         
         $weekStart = new Time(strtotime('monday this week'));
         $weekEnd = new Time(strtotime('sunday this week'));
-        $weekStartAff = $weekStart->format('d-M H:m');
-        $weekEndAff = $weekEnd->format('d-M H:m');
-        $seance = array(
-            "1" => "",
-            "2" => "",
-            "3" => "",
-            "4" => "",
-            "5" => "",
-            "6" => "",
-            "7" => ""
-        );
         
-        
-        /*
-        $seance = $seance."<td>$weekStartAff</td>";
-        $seance = $seance."<td>$weekEndAff</td>";
-        */
-        
+        // On effectue la requête pour obtenir les instanes des séances en question
         $query = TableRegistry::get('showtimes')->find();
         $query->where(['room_id' => $room->id]);
         $query->where(['start >=' => $weekStart]);
-        $query->where(['end <=' => $weekEnd]);
+        $query->where(['start <=' => $weekEnd]);
+        $query->order(['start']);
+        
+        // On parcourt toutes les instances trouvées
         foreach ($query as $data) {
+            // On associe l'ID du film au film correspondant
             $queryFilm = TableRegistry::get('movies')->find();
             $movieName = $queryFilm->where(['id' => $data->movie_id])->first();
+            
+            // On parse sous le format correspondant les horaires
             $date = new Time($data->start);
-            $dateBegin = $date->format('d-M H:m');
+            $dateBegin = $date->format('H\hm');
             $date = new Time($data->end);
-            $dateEnd = $date->format('d-M H:m');
-            $seance[$data->start->format('N')] =  $seance[$data->start->format('N')]." Nom : $movieName->name<br>Début : $dateBegin<br>Fin : $dateEnd";
+            $dateEnd = $date->format('H\hm');
+            
+            // On ajoute le texte dans le tableau de résultat sous le jour correspondant
+            $seance[$data->start->format('N')][] = "$movieName->name<br>$dateBegin / $dateEnd";
             
         }
         
+        // On retourne dans le view les variables
         $this->set('room', $room);
         $this->set('_serialize', ['room']);
         $this->set('seance', $seance);
